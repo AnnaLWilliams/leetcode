@@ -64,6 +64,7 @@
  */
 
 // @lc code=start
+
 public class WordDictionary {
     Node tree;
     public WordDictionary() {
@@ -103,15 +104,23 @@ public class WordDictionary {
 
     public bool Search(string word)
     {
+        return MySearch(word, tree);
+    }
+    public bool MySearch(string word, Node node)
+    {
         var wordOrder = 0;
-        var node = tree;
-        while(true)
+        while (true)
         {
             wordOrder = CalcWordOrder(node.value, word);
 
             if (wordOrder == -1)//a copy of the word has been found
             {
                 return true;
+            }
+            else if (wordOrder == -2)
+            {
+                //there is a wild card so both branches need to be checked
+                return node.children[0] == null ? false: MySearch(word, node.children[0]) ||node.children[1] == null ? false: MySearch(word, node.children[1]);
             }
             else if (node.children[wordOrder] == null) //An empty branch has been found
             {
@@ -122,6 +131,22 @@ public class WordDictionary {
                 node = node.children[wordOrder];
             }
         }
+    }
+
+    public bool CompareWithWildcard(string checkWord, string wildcardWord)
+    {
+        if (checkWord.Length != wildcardWord.Length)
+        {
+            return false;
+        }
+        for(var index = 0; index < checkWord.Length && index < wildcardWord.Length; index++)
+        {
+            if (checkWord[index] != wildcardWord[index] && wildcardWord[index] != '.')
+            {
+                return false;
+            }
+        }
+        return true;
     }
     
     /// <summary>
@@ -141,7 +166,14 @@ public class WordDictionary {
         {
             if (branchWord[index] == '.')
             {
-                return -2;
+                if (CompareWithWildcard(rootWord, branchWord))
+                {
+                    return -1;
+                }
+                else
+                {
+                    return -2;
+                }
             }
             else if (rootWord[index] < branchWord[index])
             {
