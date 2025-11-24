@@ -97,7 +97,7 @@ class Solution:
         total = 0
         currentCount = 0
         lastSymbol = "S"
-        for symbol in test:
+        for symbol in s:
             if symbolValue[lastSymbol] > symbolValue[symbol]:
                 total += currentCount
                 currentCount = symbolValue[symbol]
