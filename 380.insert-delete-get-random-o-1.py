@@ -74,48 +74,26 @@ import random
 class RandomizedSet:
 
   def __init__(self):
-    self.values = list()
+    self.values = dict()
 
   def insert(self, val: int) -> bool:
-    if any(x == val for x in self.values):
+    if val in self.values:
       return False
     else:
-      self.values.append(val)
+      self.values[val] = True
       return True
 
   def remove(self, val: int) -> bool:
-    for index in range(len(self.values)):
-      if index == val:
-        self.values.pop(index)
-        return True
-    return False
-        
-
-  def getRandom(self) -> int:
-    return self.values[len(self.values) - 1]
-
-class RandomizedSet:
-
-  def __init__(self):
-    self.values = list()
-
-  def insert(self, val: int) -> bool:
-    if any(x == val for x in self.values):
-      return False
-    else:
-      self.values.append(val)
+    if val in self.values:
+      self.values.pop(val)
       return True
-
-  def remove(self, val: int) -> bool:
-    for index in range(len(self.values)):
-      if self.values[index] == val:
-        self.values.pop(index)
-        return True
-    return False
+    else:
+      return False
         
 
   def getRandom(self) -> int:
-    return self.values[random.randrange(len(self.values))]
+
+    return random.choice(list(self.values.keys()))
 
 
 # Your RandomizedSet object will be instantiated and called as such:
